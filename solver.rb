@@ -13,7 +13,7 @@ def solve(level_string)
 
     ##### Functions ######
 
-    is_on_board_func = is_on_board(level_array)
+    is_on_board_func = is_on_board(level_array) #why represent the board as a function?
     is_goal_func = ->(block){ block.a == goal_pos && standing?(block) }
 
     start_block = block(start_pos, start_pos)
@@ -23,7 +23,7 @@ def solve(level_string)
     sequence = move_sequence(starting_move_lists, is_on_board_func)
 
     # puts 'filtering'
-    solutions = sequence.filter { |move_list| is_goal_func.call(move_list.head.block)}
+    solutions = sequence.select { |move_list| is_goal_func.call(move_list.head.block)}
 
     #puts 'taking first'
     best_solution = solutions.first
@@ -33,14 +33,6 @@ def solve(level_string)
     best_solution.map(&:direction).reverse.remove { |item| item.nil? }
 end
 
-def move_sequence(move_lists, is_on_board_func)
-    if(move_lists.any?)
-        next_tier_of_moves = move_lists.flat_map { |move_list| legal_new_next_moves_list(move_list, is_on_board_func) }
-        move_lists.concat( Hamster::Stream.new { move_sequence(next_tier_of_moves, is_on_board_func) })
-    else
-        Hamster.list
-    end
-end
 
 ######################## Position functions ###########################
 
@@ -165,6 +157,15 @@ def legal_new_next_moves_list(move_list, is_on_board_func)
     already_visited_blocks = move_list.map(&:block)
     new_legal_moves = legal_moves.filter { |move| !already_visited_blocks.include? move.block }
     new_legal_moves.map { |move| move_list.cons(move) }
+end
+
+def move_sequence(move_lists, is_on_board_func)
+    if(move_lists.any?)
+        next_tier_of_moves = move_lists.flat_map { |move_list| legal_new_next_moves_list(move_list, is_on_board_func) }
+        move_lists.concat( Hamster::Stream.new { move_sequence(next_tier_of_moves, is_on_board_func) })
+    else
+        Hamster.list
+    end
 end
 
 
