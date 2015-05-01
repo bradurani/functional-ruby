@@ -5,10 +5,10 @@ require_relative 'solver.rb'
 level_string = '--------oooo----
                 --------oooo----
                 ooo-----o--oooo-
-                ooooooooo---oGo-
-                ooo----ooS--ooo-
+                oSooooooo---oGo-
                 ooo----ooo--ooo-
-                -ooo---o--------
+                ooo----ooo--ooo-
+                -oo----o--------
                 --oooooo--------
                 ----------------
                 ----------------'

@@ -33,12 +33,18 @@ def solve(level_string)
     best_solution.map(&:direction).reverse.remove { |item| item.nil? }
 end
 
-
-######################## Position functions ###########################
+######################## Data Types #############################
 
 def pos(row, column)
-    OpenStruct.new({ row: row, column: column })
+    OpenStruct.new({ row: row, column: column }) #most functional languages would use a tuple
 end
+
+def block(posA, posB)
+    OpenStruct.new({ a: posA, b: posB })
+end
+
+
+######################## Position functions ###########################
 
 def is_on_board(level_array)
     ->(pos) {
@@ -71,10 +77,6 @@ def down(pos)
 end
 
 ############ Block Functions ########
-
-def block(posA, posB)
-    OpenStruct.new({ a: posA, b: posB })
-end
 
 def standing?(block)
     block.a == block.b
