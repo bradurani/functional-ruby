@@ -1,6 +1,6 @@
 require 'ostruct'
 require 'hamster'
-
+require 'pry'
 
 
 def solve(level_string)
@@ -30,7 +30,7 @@ def solve(level_string)
 
     raise 'Level has no solution' if(best_solution.nil?)
 
-    best_solution.map(&:direction).reverse.remove { |item| item.nil? }
+    best_solution.map(&:direction).reverse.delete_if(&:nil?)
 end
 
 ######################## Data Types #############################
@@ -150,21 +150,23 @@ def moves(block)
 end
 
 def legal_moves(block, is_on_board_func)
-    moves(block).filter { |move| is_on_board_func.call(move.block.a) && is_on_board_func.call(move.block.b) }
+    moves(block).select { |move| is_on_board_func.call(move.block.a) && is_on_board_func.call(move.block.b) }
 end
 
 def legal_new_next_moves_list(move_list, is_on_board_func)
     #puts 'new moves'
     legal_moves = legal_moves(move_list.head.block, is_on_board_func)
     already_visited_blocks = move_list.map(&:block)
-    new_legal_moves = legal_moves.filter { |move| !already_visited_blocks.include? move.block }
+    new_legal_moves = legal_moves.select { |move| !already_visited_blocks.include? move.block }
     new_legal_moves.map { |move| move_list.cons(move) }
 end
 
 def move_sequence(move_lists, is_on_board_func)
     if(move_lists.any?)
         next_tier_of_moves = move_lists.flat_map { |move_list| legal_new_next_moves_list(move_list, is_on_board_func) }
-        move_lists.concat( Hamster::Stream.new { move_sequence(next_tier_of_moves, is_on_board_func) })
+        move_lists.concat(Hamster::LazyList.new do 
+          move_sequence(next_tier_of_moves, is_on_board_func) 
+        end)
     else
         Hamster.list
     end
