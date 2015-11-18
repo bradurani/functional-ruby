@@ -1,9 +1,11 @@
 GEM
   remote: https://rubygems.org/
   specs:
+    atomic (1.1.99)
     awesome_print (1.2.0)
     diff-lcs (1.2.5)
-    hamster (1.0.1.pre.rc2)
+    hamster (1.0.0)
+      atomic (~> 1.1)
     rspec (3.0.0)
       rspec-core (~> 3.0.0)
       rspec-expectations (~> 3.0.0)
@@ -22,5 +24,8 @@ PLATFORMS
 
 DEPENDENCIES
   awesome_print
-  hamster (~> 1.0.1.pre.rc2)
+  hamster (= 1.0.0)
   rspec (~> 3.0.0)
+
+BUNDLED WITH
+   1.10.6
